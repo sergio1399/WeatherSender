@@ -110,11 +110,15 @@ public class Forecast {
     @Override
     public String toString() {
         return "Forecast{" +
-                "temperature='" + temperature + '\'' +
+                "id=" + id +
+                ", temperature='" + temperature + '\'' +
                 ", wind='" + wind + '\'' +
                 ", text='" + text + '\'' +
                 ", pressure=" + pressure +
                 ", visibility=" + visibility +
+                ", forecastDate=" + forecastDate +
+                ", city=" + city +
+                ", version=" + version +
                 '}';
     }
 }

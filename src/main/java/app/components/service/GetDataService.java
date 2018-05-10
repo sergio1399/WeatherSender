@@ -12,6 +12,7 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -23,11 +24,11 @@ public class GetDataService {
     @Autowired
     private JmsTemplate jmsTemplate;
 
-    public ForecastCityView getView(String city) throws HandmadeException {
+    public ForecastCityView getView(String city) throws ClassCastException, NullPointerException, ParseException, HandmadeException {
 
         RestTemplate restTemplate = new RestTemplate();
-        String str_uri = "https://query.yahooapis.com/v1/public/yql?q=";
-        str_uri += String.format("select * from weather.forecast where woeid in (select woeid from geo.places(1) where text=\"%s\")", city);
+        String strUri = "https://query.yahooapis.com/v1/public/yql?q=";
+        strUri += String.format("select * from weather.forecast where woeid in (select woeid from geo.places(1) where text=\"%s\")", city);
 
         restTemplate.setMessageConverters(getMessageConverters());
         HttpHeaders headers = new HttpHeaders();
@@ -35,7 +36,7 @@ public class GetDataService {
         HttpEntity<String> entity = new HttpEntity<String>(headers);
 
         ResponseEntity<Object> response =
-                restTemplate.exchange(str_uri, HttpMethod.GET, entity, Object.class, "1");
+                restTemplate.exchange(strUri, HttpMethod.GET, entity, Object.class, "1");
         Object object = response.getBody();
 
         JSONObject json = new JSONObject((LinkedHashMap<String, String>) object);

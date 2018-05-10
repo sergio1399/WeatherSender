@@ -71,12 +71,16 @@ public class ForecastCityView {
     @Override
     public String toString() {
         return "ForecastCityView{" +
-                "temperature='" + temperature + '\'' +
+                "cityName='" + cityName + '\'' +
+                ", cityRegion='" + cityRegion + '\'' +
+                ", cityCountry='" + cityCountry + '\'' +
+                ", temperature='" + temperature + '\'' +
                 ", wind='" + wind + '\'' +
                 ", text='" + text + '\'' +
                 ", pressure=" + pressure +
                 ", visibility=" + visibility +
                 ", cityId=" + cityId +
+                ", forecastDate=" + forecastDate +
                 '}';
     }
 }
