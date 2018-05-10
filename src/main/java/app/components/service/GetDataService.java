@@ -1,7 +1,7 @@
 package app.components.service;
 
 import app.components.util.ForecastConverter;
-import app.components.util.HandmadeException;
+import app.components.exception.NotExistCityException;
 import app.components.view.ForecastCityView;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +24,12 @@ public class GetDataService {
     @Autowired
     private JmsTemplate jmsTemplate;
 
-    public ForecastCityView getView(String city) throws ClassCastException, NullPointerException, ParseException, HandmadeException {
+    private static final String YAHOOSTR = "https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text=\"%s\")";
+
+    public ForecastCityView getView(String city) throws ClassCastException, NullPointerException, ParseException, NotExistCityException {
 
         RestTemplate restTemplate = new RestTemplate();
-        String strUri = "https://query.yahooapis.com/v1/public/yql?q=";
-        strUri += String.format("select * from weather.forecast where woeid in (select woeid from geo.places(1) where text=\"%s\")", city);
+        String strUri = String.format(YAHOOSTR, city);
 
         restTemplate.setMessageConverters(getMessageConverters());
         HttpHeaders headers = new HttpHeaders();
@@ -40,8 +41,8 @@ public class GetDataService {
         Object object = response.getBody();
 
         JSONObject json = new JSONObject((LinkedHashMap<String, String>) object);
-        if(json.getJSONObject("query").get("results") == null){
-            throw new HandmadeException("There's no such a city!");
+        if(!json.getJSONObject("query").has("results")){
+            throw new NotExistCityException("City " + city + " doesn't exist!");
         }
         ForecastCityView forecastCityView = ForecastConverter.jsonToForecastCityView(json);
 
