@@ -15,8 +15,12 @@ import java.text.ParseException;
 @Controller
 public class ForecastController {
 
-    @Autowired
     private GetDataService getDataService;
+
+    @Autowired
+    public void setGetDataService(GetDataService getDataService) {
+        this.getDataService = getDataService;
+    }
 
     @RequestMapping(path={"/"},method=RequestMethod.GET)
     public String init(Model model) {

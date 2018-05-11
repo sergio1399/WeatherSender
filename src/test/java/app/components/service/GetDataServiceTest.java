@@ -22,7 +22,6 @@ public class GetDataServiceTest {
                 temperature("48").wind("chill: 48, direction:0, speed:4").text("Partly Cloudy").pressure(1021.0).
                 visibility(12.5).cityId(2367105).build();
         org.mockito.Mockito.when(getDataService.getView("Boston")).thenReturn(view);
-
         assertEquals(getDataService.getView("Boston"), view);
     }
 
